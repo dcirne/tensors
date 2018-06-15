@@ -1,0 +1,8 @@
+bazel-*
+*.o
+*.out
+*.sublime-project
+*.sublime.workspace
+.DS_Store
+build/
+events.out.tfevents*
