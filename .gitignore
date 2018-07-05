@@ -6,3 +6,8 @@ bazel-*
 .DS_Store
 build/
 events.out.tfevents*
+*.data-*
+*.index
+*.meta
+checkpoint
+*.pb
