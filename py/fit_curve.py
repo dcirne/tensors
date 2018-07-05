@@ -15,7 +15,7 @@ rng = numpy.random
 with tf.Session() as sess:
     # Parameters
     learning_rate = 0.01
-    training_epochs = 200
+    training_epochs = 1000
     display_step = 100
 
     # Training Data
