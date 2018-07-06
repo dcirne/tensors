@@ -1,5 +1,6 @@
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/core/platform/env.h"
+#include "tensorflow/core/protobuf/meta_graph.pb.h"
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -25,8 +26,21 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Restored the saved metagraph
+    tensorflow::MetaGraphDef meta_graph_def;
+    tensorflow::Tensor checkpointPathTensor(tensorflow::DT_STRING, tensorflow::TensorShape());
+    checkpointPathTensor.scalar<std::string>()() = "/home/dalmo/work/tensors/models/variables";
+    std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict = {{meta_graph_def.saver_def().filename_tensor_name(), checkpointPathTensor}};
+    status = session->Run(feed_dict, {}, {meta_graph_def.saver_def().restore_op_name()}, nullptr);
+    if (!status.ok()) {
+        std::cout << "Error restoring metagraph and variables." << std::endl;
+        std::cout << status.ToString() << std::endl;
+        return 1;
+    }
+
     // Add the graph to the session
-    status = session->Create(graph_def);
+//    status = session->Create(graph_def);
+    status = session->Create(meta_graph_def.graph_def());
     if (!status.ok()) {
         std::cout << status.ToString() << std::endl;
         return 1;
@@ -82,7 +96,6 @@ int main(int argc, char* argv[]) {
     // The session will initialize the outputs
     std::vector<tensorflow::Tensor> outputs;
 
-    // Run the session, evaluating our "c" operation from the graph
     std::cout << "Will run" << std::endl;
     status = session->Run(inputs, {"prediction"}, {}, &outputs);
     if (!status.ok()) {
