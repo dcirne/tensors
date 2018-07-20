@@ -14,6 +14,9 @@ Install the dependencies
 sudo apt install autoconf automake libtool curl make g++ 
 sudo apt install unzip git openjdk-8-jdk pkg-config git-lfs 
 sudo apt install python-numpy swig python-dev python-wheel python-pip
+sudo apt-get install python-tk
+pip install tensorflow
+pip install matplotlib
 ```
 
 Configure git
